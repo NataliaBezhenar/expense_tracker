@@ -9,6 +9,7 @@ const NewExpense = (props) => {
   const [error, setError] = useState();
 
   const saveExpenseDataHandler = (enteredExpenseData) => {
+    console.log(enteredExpenseData);
     if (
       enteredExpenseData.title.length === 0 ||
       enteredExpenseData.amount.length === 0
@@ -26,6 +27,15 @@ const NewExpense = (props) => {
       });
       return;
     }
+
+    if (enteredExpenseData.date.toString() === "Invalid Date") {
+      setError({
+        errorTitle: "Invalid Date",
+        errorMessage: "Please enter valid date",
+      });
+      return;
+    }
+
     const expenseData = {
       ...enteredExpenseData,
       id: Math.random().toString(),
