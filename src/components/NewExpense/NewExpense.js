@@ -5,7 +5,14 @@ import ExpenseForm from "../Expenses/ExpenseForm";
 
 const NewExpense = (props) => {
   const [isEditing, setIsEditing] = useState(false);
+
   const saveExpenseDataHandler = (enteredExpenseData) => {
+    if (
+      enteredExpenseData.title.length === 0 ||
+      enteredExpenseData.amount <= 0
+    ) {
+      console.log("not all data fields filled");
+    }
     const expenseData = {
       ...enteredExpenseData,
       id: Math.random().toString(),
