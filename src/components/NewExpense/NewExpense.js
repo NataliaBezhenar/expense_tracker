@@ -2,16 +2,29 @@ import React, { useState } from "react";
 
 import "./NewExpense.css";
 import ExpenseForm from "../Expenses/ExpenseForm";
+import ErrorModal from "../ErrorModal";
 
 const NewExpense = (props) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState();
 
   const saveExpenseDataHandler = (enteredExpenseData) => {
     if (
       enteredExpenseData.title.length === 0 ||
-      enteredExpenseData.amount <= 0
+      enteredExpenseData.amount.length === 0
     ) {
-      console.log("not all data fields filled");
+      setError({
+        errorTitle: "Invalid input",
+        errorMessage: "Please fill all fields",
+      });
+      return;
+    }
+    if (+enteredExpenseData.amount <= 0) {
+      setError({
+        errorTitle: "Invalid amount",
+        errorMessage: "Expense amount should be greater then zero",
+      });
+      return;
     }
     const expenseData = {
       ...enteredExpenseData,
@@ -25,20 +38,33 @@ const NewExpense = (props) => {
     setIsEditing(!isEditing);
   };
 
+  const errorHandler = () => {
+    setError(null);
+  };
+
   return (
-    <div className="new-expense">
-      {!isEditing && (
-        <button type="button" onClick={startEditingHandler}>
-          Add New Expense
-        </button>
-      )}
-      {isEditing && (
-        <ExpenseForm
-          onSaveExpenseData={saveExpenseDataHandler}
-          onCancel={startEditingHandler}
+    <>
+      {error && (
+        <ErrorModal
+          errorTitle={error.errorTitle}
+          errorMessage={error.errorMessage}
+          onConfirm={errorHandler}
         />
       )}
-    </div>
+      <div className="new-expense">
+        {!isEditing && (
+          <button type="button" onClick={startEditingHandler}>
+            Add New Expense
+          </button>
+        )}
+        {isEditing && (
+          <ExpenseForm
+            onSaveExpenseData={saveExpenseDataHandler}
+            onCancel={startEditingHandler}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
