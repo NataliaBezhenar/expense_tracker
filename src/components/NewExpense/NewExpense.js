@@ -9,7 +9,6 @@ const NewExpense = (props) => {
   const [error, setError] = useState();
 
   const saveExpenseDataHandler = (enteredExpenseData) => {
-    console.log(enteredExpenseData);
     if (
       enteredExpenseData.title.length === 0 ||
       enteredExpenseData.amount.length === 0
